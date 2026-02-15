@@ -148,4 +148,4 @@ O instrutor propõe as seguintes melhorias como desafio adicional:
 
 ## 👤 Autor
 
-Desenvolvido por **Arthur** como entrega para o curso **TQI - FullStack Developer** na plataforma DIO.
+Desenvolvido por **Arthur** como entrega para o curso **TQI - FullStack Developer** na plataforma DIO..
