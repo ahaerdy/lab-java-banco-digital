@@ -4,7 +4,7 @@ Projeto desenvolvido como parte do curso **TQI - FullStack Developer** na plataf
 
 ---
 
-## 📌 Descrição do Projeto
+## Descrição do Projeto
 
 Simulação de um sistema bancário digital simples, onde é possível criar clientes, abrir contas correntes e contas poupança, realizar depósitos, saques e transferências entre contas, além de imprimir extratos detalhados.
 
@@ -55,7 +55,7 @@ out/
 
 ---
 
-## 🗂️ Estrutura dos Arquivos
+## 🗂️ Descrição dos Arquivos
 
 ### `IConta.java`
 Interface que define o **contrato** de comportamento de qualquer conta bancária no sistema. Declara os seguintes métodos que todas as contas devem implementar:
@@ -134,7 +134,7 @@ Saldo: 100,00
 
 ---
 
-## 🧠 Conceitos de POO Aplicados
+## Conceitos de POO Aplicados
 
 | Conceito | Aplicação no Projeto |
 |---|---|
@@ -151,7 +151,7 @@ Saldo: 100,00
 
 ---
 
-## 📋 Requisitos Técnicos
+## Requisitos Técnicos
 
 - Conhecimentos básicos de Programação Orientada a Objetos em Java
 - Ambiente de desenvolvimento Java configurado (JDK 11+)
@@ -160,7 +160,7 @@ Saldo: 100,00
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Java** (JDK 11+)
 - **IntelliJ IDEA Community Edition**
