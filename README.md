@@ -2,8 +2,6 @@
 
 Projeto desenvolvido como parte do curso **TQI - FullStack Developer** na plataforma [DIO](https://www.dio.me/), com o objetivo de praticar os conceitos de **Programação Orientada a Objetos (POO)** em Java, incluindo herança, abstração, encapsulamento e polimorfismo.
 
-> **Instrutor:** Venilton Falvo Jr. — Doutor em Engenharia de Software e Education Tech Lead na DIO. [LinkedIn](https://www.linkedin.com/in/falvojr/)
-
 ---
 
 ## 📌 Descrição do Projeto
@@ -14,6 +12,46 @@ O domínio bancário foi escolhido por sua familiaridade, facilitando a traduç�
 
 - **Entidades:** O banco oferece dois tipos de conta — **Corrente** e **Poupança**.
 - **Funcionalidades:** As contas devem permitir operações de **depósito**, **saque** e **transferência** (restrita a contas da própria instituição).
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+lab-java-banco-digital/
+├── src/
+│   └── main/
+│       └── java/
+│           └── org/
+│               └── banco/
+│                   ├── Banco.java
+│                   ├── Cliente.java
+│                   ├── Conta.java
+│                   ├── ContaCorrente.java
+│                   ├── ContaPoupanca.java
+│                   ├── IConta.java
+│                   └── Main.java
+├── .gitignore
+└── README.md
+```
+
+- **`src/`** — único diretório versionado com código, organizado no pacote `org.banco`.
+- **`.gitignore`** — define o que o Git deve ignorar (ver abaixo).
+- **`README.md`** — documentação do projeto.
+
+### O que NÃO versionar
+
+O IntelliJ gera arquivos e pastas locais que não devem ir para o repositório, pois são específicos da máquina e da IDE de cada desenvolvedor. O `.gitignore` deve conter no mínimo:
+
+```
+out/
+*.iml
+.idea/
+```
+
+- **`out/`** — arquivos `.class` compilados. São gerados automaticamente a partir do fonte; não há razão para versioná-los.
+- **`*.iml`** — arquivo de configuração do módulo do IntelliJ, específico da instalação local.
+- **`.idea/`** — pasta criada pelo IntelliJ com configurações internas da IDE, também local.
 
 ---
 
@@ -148,4 +186,4 @@ O instrutor propõe as seguintes melhorias como desafio adicional:
 
 ## 👤 Autor
 
-Desenvolvido por **Arthur** como entrega para o curso **TQI - FullStack Developer** na plataforma DIO..
+Desenvolvido por **Arthur Haerdy** como entrega para o curso **TQI - FullStack Developer** na plataforma DIO.
