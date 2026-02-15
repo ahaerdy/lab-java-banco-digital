@@ -167,23 +167,6 @@ Saldo: 100,00
 
 ---
 
-## 🚀 Sugestões de Evolução
-
-O instrutor propõe as seguintes melhorias como desafio adicional:
-
-- **Extensão do Domínio** — Incluir novas classes, atributos e métodos ao projeto (ex.: tipos de conta adicionais, taxas, rendimentos).
-- **Redução de Verbosidade** — Incluir o [Lombok](https://projectlombok.org/) para eliminar código repetitivo como getters, setters e construtores.
-
----
-
-## 🔗 Links Úteis
-
-- [Slides da aula](https://docs.google.com/presentation/d/1sGnTlpJK0F08hSZebk8LNTsOkHVBivVu/edit?usp=sharing&ouid=105300330738120646134&rtpof=true&sd=true)
-- [Repositório de referência do instrutor](https://github.com/falvojr/dio-live-20210802)
-- [Curso na plataforma DIO](https://web.dio.me/project/criando-um-banco-digital-com-java-e-orientacao-objetos/learning/133f3c7e-4474-4582-8e78-987f038ab283)
-
----
-
 ## 👤 Autor
 
 Desenvolvido por **Arthur Haerdy** como entrega para o curso **TQI - FullStack Developer** na plataforma DIO.
