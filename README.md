@@ -1,4 +1,4 @@
-# 🏦 Banco Digital — Projeto Java POO
+# Banco Digital — Projeto Java POO
 
 Projeto desenvolvido como parte do curso **TQI - FullStack Developer** na plataforma [DIO](https://www.dio.me/), com o objetivo de praticar os conceitos de **Programação Orientada a Objetos (POO)** em Java, incluindo herança, abstração, encapsulamento e polimorfismo.
 
@@ -167,6 +167,6 @@ Saldo: 100,00
 
 ---
 
-## 👤 Autor
+## Autor
 
 Desenvolvido por **Arthur Haerdy** como entrega para o curso **TQI - FullStack Developer** na plataforma DIO.
