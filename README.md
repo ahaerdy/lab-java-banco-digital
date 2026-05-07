@@ -210,7 +210,7 @@ public abstract class Conta implements IConta {
 ```
 
 **Por que a classe é `abstract`?**
-Porque não faz sentido instanciar uma "Conta genérica" — no mundo real, toda conta é **Corrente** ou **Poupança**. A palavra-chave `abstract` impede que alguém escreva `new Conta(cliente)`, forçando o uso sempre de um tipo concreto. Além disso, o método `imprimirExtrato()` não tem implementação aqui porque cada tipo de conta exibe seu extrato de forma diferente — essa decisão é delegada às subclasses.
+Porque não faz sentido instanciar uma "Conta genérica". No mundo real, toda conta é **Corrente** ou **Poupança**. A palavra-chave `abstract` impede que alguém escreva `new Conta(cliente)`, forçando o uso sempre de um tipo concreto. Além disso, o método `imprimirExtrato()` não tem implementação aqui porque cada tipo de conta exibe seu extrato de forma diferente — essa decisão é delegada às subclasses.
 
 **O que é `static` em `SEQUENCIAL`?**
 Atributos `static` pertencem à **classe**, não à instância. Isso significa que todas as contas compartilham o mesmo `SEQUENCIAL`. Quando a primeira conta é criada, `SEQUENCIAL` vai para 2; na segunda, para 3; e assim por diante. Se `SEQUENCIAL` não fosse `static`, cada conta teria seu próprio contador, e todas teriam número 1.
@@ -521,14 +521,14 @@ out/
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Java** (JDK 11+)
 - **IntelliJ IDEA Community Edition**
 
 ---
 
-## 📚 Referências
+## Referências
 
 - [Documentação oficial do Java — Oracle](https://docs.oracle.com/en/java/)
 - [Repositório de Estudos — Bootcamp TQI Fullstack Developer](https://github.com/ahaerdy/DIO-learning/tree/main/TQI%20Fullstack%20Developer)
