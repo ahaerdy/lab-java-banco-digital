@@ -4,7 +4,7 @@
 
 ---
 
-## 📋 Índice
+## Índice
 
 - [Sobre o Projeto](#-sobre-o-projeto)
 - [Estrutura do Projeto](#-estrutura-do-projeto)
@@ -71,12 +71,12 @@ O diagrama abaixo ilustra o relacionamento entre as classes:
 ```
           «interface»
            IConta
-        ┌──────────────┐
-        │ + sacar()    │
-        │ + depositar()│
-        │ + transferir()│
+        ┌─────────────────────┐
+        │ + sacar()           │
+        │ + depositar()       │
+        │ + transferir()      │
         │ + imprimirExtrato() │
-        └──────┬───────┘
+        └──────┬──────────────┘
                │ implements
         ┌──────┴───────┐
         │  «abstract»  │
@@ -88,11 +88,11 @@ O diagrama abaixo ilustra o relacionamento entre as classes:
         │ # cliente    │
         └──────┬───────┘
                │ extends
-      ┌────────┴────────┐
-      │                 │
-┌─────┴──────┐   ┌──────┴──────┐
+      ┌────────┴─────────┐
+      │                  │
+┌─────┴───────┐   ┌──────┴──────┐
 │ContaCorrente│   │ContaPoupanca│
-└────────────┘   └─────────────┘
+└─────────────┘   └─────────────┘
 ```
 
 > **Leitura do diagrama:** `IConta` define o **contrato** (o que toda conta deve saber fazer). `Conta` **implementa** esse contrato com a lógica padrão, mas delega `imprimirExtrato()` às subclasses. `ContaCorrente` e `ContaPoupanca` **herdam** de `Conta` e cada uma implementa o seu próprio extrato. `Cliente` é **composto** dentro de `Conta` (relação "tem-um").
