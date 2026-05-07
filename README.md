@@ -1,17 +1,42 @@
-# Banco Digital - Projeto Java POO
+# 🏦 Banco Digital — Projeto Java POO
 
-Projeto desenvolvido como parte do curso **TQI - FullStack Developer** na plataforma [DIO](https://www.dio.me/), com o objetivo de praticar os conceitos de **Programação Orientada a Objetos (POO)** em Java, incluindo herança, abstração, encapsulamento e polimorfismo.
+> Projeto desenvolvido como parte do curso **TQI - FullStack Developer** na plataforma [DIO](https://www.dio.me/), com o objetivo de praticar os quatro pilares da **Programação Orientada a Objetos (POO)** em Java: **abstração**, **encapsulamento**, **herança** e **polimorfismo**.
 
 ---
 
-## Descrição do Projeto
+## 📋 Índice
 
-Simulação de um sistema bancário digital simples, onde é possível criar clientes, abrir contas correntes e contas poupança, realizar depósitos, saques e transferências entre contas, além de imprimir extratos detalhados.
+- [Sobre o Projeto](#-sobre-o-projeto)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Arquitetura e Design](#-arquitetura-e-design)
+- [Descrição Detalhada dos Arquivos](#-descrição-detalhada-dos-arquivos)
+  - [IConta.java — A Interface (Contrato)](#icontajava--a-interface-contrato)
+  - [Conta.java — A Classe Abstrata (Base)](#contajava--a-classe-abstrata-base)
+  - [ContaCorrente.java — Conta Corrente](#contaCorrentejava--conta-corrente)
+  - [ContaPoupanca.java — Conta Poupança](#contapoupancajava--conta-poupança)
+  - [Cliente.java — O Cliente](#clientejava--o-cliente)
+  - [Banco.java — O Banco](#bancojava--o-banco)
+  - [Main.java — Ponto de Entrada](#mainjava--ponto-de-entrada)
+- [Os Quatro Pilares da POO no Projeto](#-os-quatro-pilares-da-poo-no-projeto)
+- [Modificadores de Acesso](#-modificadores-de-acesso)
+- [Saída Esperada](#-saída-esperada)
+- [Como Executar](#-como-executar)
+- [O que NÃO Versionar](#-o-que-não-versionar)
+- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+- [Referências](#-referências)
 
-O domínio bancário foi escolhido por sua familiaridade, facilitando a tradução de regras de negócio para o código. O desafio consiste em:
+---
 
-- **Entidades:** O banco oferece dois tipos de conta — **Corrente** e **Poupança**.
-- **Funcionalidades:** As contas devem permitir operações de **depósito**, **saque** e **transferência** (restrita a contas da própria instituição).
+## Sobre o Projeto
+
+Este projeto simula um sistema bancário digital simplificado. O domínio bancário foi escolhido pela sua familiaridade no dia a dia, o que facilita a tradução de regras de negócio para código.
+
+**Funcionalidades implementadas:**
+
+- Criação de clientes
+- Abertura de Conta Corrente e Conta Poupança
+- Depósito, saque e transferência entre contas
+- Impressão de extrato detalhado por tipo de conta
 
 ---
 
@@ -24,24 +49,462 @@ lab-java-banco-digital/
 │       └── java/
 │           └── org/
 │               └── banco/
-│                   ├── Banco.java
-│                   ├── Cliente.java
-│                   ├── Conta.java
-│                   ├── ContaCorrente.java
-│                   ├── ContaPoupanca.java
-│                   ├── IConta.java
-│                   └── Main.java
+│                   ├── IConta.java          ← Interface (contrato das contas)
+│                   ├── Conta.java           ← Classe abstrata (base comum)
+│                   ├── ContaCorrente.java   ← Tipo concreto de conta
+│                   ├── ContaPoupanca.java   ← Tipo concreto de conta
+│                   ├── Cliente.java         ← Entidade cliente
+│                   ├── Banco.java           ← Entidade banco
+│                   └── Main.java            ← Ponto de entrada da aplicação
 ├── .gitignore
 └── README.md
 ```
 
-- **`src/`** — único diretório versionado com código, organizado no pacote `org.banco`.
-- **`.gitignore`** — define o que o Git deve ignorar (ver abaixo).
-- **`README.md`** — documentação do projeto.
+> **Por que essa organização de pastas?**
+> O caminho `src/main/java/org/banco` segue a convenção do Maven (gerenciador de projetos Java mais popular). A pasta `src/main/java` separa o código-fonte de testes e recursos. O pacote `org.banco` evita conflito de nomes com classes de outros projetos — é uma boa prática usar o domínio invertido da organização como prefixo do pacote.
 
-### O que NÃO versionar
+---
 
-O IntelliJ gera arquivos e pastas locais que não devem ir para o repositório, pois são específicos da máquina e da IDE de cada desenvolvedor. O `.gitignore` deve conter no mínimo:
+## Arquitetura e Design
+
+O diagrama abaixo ilustra o relacionamento entre as classes:
+
+```
+          «interface»
+           IConta
+        ┌──────────────┐
+        │ + sacar()    │
+        │ + depositar()│
+        │ + transferir()│
+        │ + imprimirExtrato() │
+        └──────┬───────┘
+               │ implements
+        ┌──────┴───────┐
+        │  «abstract»  │
+        │    Conta     │         Cliente
+        │──────────────│        ┌────────┐
+        │ # agencia    │◄───────│ - nome │
+        │ # numero     │ has-a  └────────┘
+        │ # saldo      │
+        │ # cliente    │
+        └──────┬───────┘
+               │ extends
+      ┌────────┴────────┐
+      │                 │
+┌─────┴──────┐   ┌──────┴──────┐
+│ContaCorrente│   │ContaPoupanca│
+└────────────┘   └─────────────┘
+```
+
+> **Leitura do diagrama:** `IConta` define o **contrato** (o que toda conta deve saber fazer). `Conta` **implementa** esse contrato com a lógica padrão, mas delega `imprimirExtrato()` às subclasses. `ContaCorrente` e `ContaPoupanca` **herdam** de `Conta` e cada uma implementa o seu próprio extrato. `Cliente` é **composto** dentro de `Conta` (relação "tem-um").
+
+---
+
+## Descrição Detalhada dos Arquivos
+
+---
+
+### `IConta.java` — A Interface (Contrato)
+
+```java
+package org.banco;
+
+public interface IConta {
+
+    void sacar(double valor);
+    void depositar(double valor);
+    void transferir(double valor, IConta contaDestino);
+    void imprimirExtrato();
+}
+```
+
+**O que é uma interface?**
+Uma interface é um **contrato**. Ela declara **o que** uma classe deve fazer, sem dizer **como** fazer. Qualquer classe que assine esse contrato (usando `implements`) é obrigada a implementar todos os métodos declarados.
+
+**Por que usar uma interface aqui?**
+Ao receber um `IConta` como parâmetro (em vez de `ContaCorrente` ou `ContaPoupanca` diretamente), o método `transferir` pode trabalhar com **qualquer tipo de conta** — presente ou futura. Se amanhã surgir uma `ContaInvestimento`, ela também pode ser usada em transferências sem alterar nenhum código existente. Isso é o **Princípio Aberto/Fechado** (Open/Closed Principle) do SOLID.
+
+> **Para iniciantes:** Pense na interface como a tomada elétrica de uma casa. Qualquer aparelho com o plugue correto (que "implementa" o contrato) pode ser ligado, independente de ser uma geladeira, televisão ou ventilador.
+
+---
+
+### `Conta.java` — A Classe Abstrata (Base)
+
+```java
+package org.banco;
+
+public abstract class Conta implements IConta {
+
+    // Constante privada: só esta classe enxerga o valor da agência padrão.
+    // "static final" indica que é compartilhada por TODAS as instâncias (nível de classe)
+    // e nunca pode ser alterada após a inicialização.
+    private static final int AGENCIA_PADRAO = 1;
+
+    // Contador estático: compartilhado entre TODAS as contas.
+    // Cada nova conta incrementa este número, garantindo que o número
+    // de cada conta seja único e sequencial.
+    private static int SEQUENCIAL = 1;
+
+    // Atributos "protected": visíveis apenas para esta classe e suas subclasses.
+    // Isso protege o saldo de ser alterado diretamente de fora da hierarquia.
+    protected int agencia;
+    protected int numero;
+    protected double saldo;
+    protected Cliente cliente;
+
+    // Construtor: executado automaticamente ao criar qualquer conta.
+    // Atribui a agência padrão e um número sequencial único, depois
+    // incrementa o SEQUENCIAL para a próxima conta.
+    public Conta(Cliente cliente) {
+        this.agencia = Conta.AGENCIA_PADRAO;
+        this.numero = SEQUENCIAL++;   // Atribui e depois incrementa (pós-incremento)
+        this.cliente = cliente;
+    }
+
+    // Implementação padrão do saque: subtrai o valor do saldo.
+    // A anotação @Override confirma que este método implementa
+    // o que foi declarado na interface IConta.
+    @Override
+    public void sacar(double valor) {
+        saldo -= valor;   // Equivalente a: saldo = saldo - valor
+    }
+
+    @Override
+    public void depositar(double valor) {
+        saldo += valor;   // Equivalente a: saldo = saldo + valor
+    }
+
+    // A transferência reutiliza os métodos já implementados:
+    // 1) Saca da conta de origem (this = esta própria conta)
+    // 2) Deposita na conta de destino
+    // Repare que "contaDestino" é do tipo IConta — não importa se é
+    // Corrente ou Poupança, desde que implemente a interface.
+    @Override
+    public void transferir(double valor, IConta contaDestino) {
+        this.sacar(valor);
+        contaDestino.depositar(valor);
+    }
+
+    // Getters públicos: permitem leitura controlada dos atributos protegidos.
+    public int getAgencia() {
+        return agencia;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    // Método utilitário protegido: as subclasses chamam este método
+    // para exibir os dados comuns, evitando duplicação de código (DRY).
+    // String.format funciona como um template: %s = texto, %d = inteiro, %.2f = decimal com 2 casas.
+    protected void imprimirInfosComuns() {
+        System.out.println(String.format("Titular: %s", this.cliente.getNome()));
+        System.out.println(String.format("Agencia: %d", this.agencia));
+        System.out.println(String.format("Numero: %d", this.numero));
+        System.out.println(String.format("Saldo: %.2f", this.saldo));
+    }
+}
+```
+
+**Por que a classe é `abstract`?**
+Porque não faz sentido instanciar uma "Conta genérica" — no mundo real, toda conta é **Corrente** ou **Poupança**. A palavra-chave `abstract` impede que alguém escreva `new Conta(cliente)`, forçando o uso sempre de um tipo concreto. Além disso, o método `imprimirExtrato()` não tem implementação aqui porque cada tipo de conta exibe seu extrato de forma diferente — essa decisão é delegada às subclasses.
+
+**O que é `static` em `SEQUENCIAL`?**
+Atributos `static` pertencem à **classe**, não à instância. Isso significa que todas as contas compartilham o mesmo `SEQUENCIAL`. Quando a primeira conta é criada, `SEQUENCIAL` vai para 2; na segunda, para 3; e assim por diante. Se `SEQUENCIAL` não fosse `static`, cada conta teria seu próprio contador, e todas teriam número 1.
+
+---
+
+### `ContaCorrente.java` — Conta Corrente
+
+```java
+package org.banco;
+
+public class ContaCorrente extends Conta {
+
+    // O construtor recebe um cliente e simplesmente repassa ao
+    // construtor da classe pai (Conta) usando "super()".
+    // Toda a lógica de agência e número sequencial fica centralizada em Conta.
+    public ContaCorrente(Cliente cliente) {
+        super(cliente);
+    }
+
+    // Implementação concreta do método abstrato herdado.
+    // Imprime o cabeçalho específico de Conta Corrente e, em seguida,
+    // chama o método da classe pai para exibir os dados comuns.
+    @Override
+    public void imprimirExtrato() {
+        System.out.println("=== Extrato Conta Corrente ===");
+        super.imprimirInfosComuns();
+    }
+}
+```
+
+**O que é `extends`?**
+`extends` estabelece uma relação de **herança**: `ContaCorrente` é uma especialização de `Conta`. Ela herda todos os atributos e métodos da classe pai e pode adicionar ou sobrescrever comportamentos. O comando `super(cliente)` chama o construtor da classe pai — em Java, isso deve ser a **primeira instrução** do construtor filho.
+
+**O que é `@Override`?**
+É uma anotação que instrui o compilador a verificar se o método está de fato sobrescrevendo algo da superclasse ou interface. Se o nome estiver errado (ex.: `imprimirextrato` com letra minúscula), o compilador avisa em vez de criar silenciosamente um método novo sem nenhum efeito.
+
+---
+
+### `ContaPoupanca.java` — Conta Poupança
+
+```java
+package org.banco;
+
+public class ContaPoupanca extends Conta {
+
+    public ContaPoupanca(Cliente cliente) {
+        super(cliente);
+    }
+
+    // Mesmo padrão de ContaCorrente, mas com cabeçalho diferente.
+    // Cada subclasse "sabe" como se apresentar sem alterar a lógica central.
+    @Override
+    public void imprimirExtrato() {
+        System.out.println("=== Extrato Conta Poupança ===");
+        super.imprimirInfosComuns();
+    }
+}
+```
+
+> **Nota de design:** A diferença entre `ContaCorrente` e `ContaPoupanca` neste projeto está apenas no extrato. Em um sistema real, a Conta Poupança teria regras extras, como rendimento mensal baseado na taxa SELIC e restrições no número de saques mensais.
+
+---
+
+### `Cliente.java` — O Cliente
+
+```java
+package org.banco;
+
+public class Cliente {
+
+    // Atributo privado: ninguém fora desta classe acessa "nome" diretamente.
+    // Isso é encapsulamento — o estado interno fica protegido.
+    private String nome;
+
+    // Getter: método público para LER o nome.
+    public String getNome() {
+        return nome;
+    }
+
+    // Setter: método público para ESCREVER o nome.
+    // No futuro, validações (ex.: verificar se o nome não é nulo ou vazio)
+    // podem ser adicionadas aqui sem impactar quem chama o método.
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+}
+```
+
+**Por que não deixar o atributo `nome` público?**
+Se `nome` fosse `public`, qualquer parte do código poderia escrever `cliente.nome = ""` ou `cliente.nome = null`, corrompendo o estado do objeto. Com o setter, é possível adicionar validações centralizadas:
+
+```java
+// Exemplo de como o setter poderia evoluir com validação:
+public void setNome(String nome) {
+    if (nome == null || nome.isBlank()) {
+        throw new IllegalArgumentException("Nome do cliente não pode ser vazio.");
+    }
+    this.nome = nome;
+}
+```
+
+Isso é a essência do **encapsulamento**: expor apenas o necessário e proteger a consistência interna.
+
+---
+
+### `Banco.java` — O Banco
+
+```java
+package org.banco;
+
+import java.util.List;
+
+public class Banco {
+
+    private String nome;
+
+    // List<Conta> é uma coleção genérica de contas.
+    // O uso de "Conta" (tipo abstrato) em vez de "ContaCorrente" permite
+    // armazenar qualquer tipo de conta na mesma lista.
+    private List<Conta> contas;
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public List<Conta> getContas() {
+        return contas;
+    }
+
+    public void setContas(List<Conta> contas) {
+        this.contas = contas;
+    }
+}
+```
+
+**Estado atual e potencial de evolução:**
+Nesta versão, `Banco` funciona como um repositório de dados. Em uma evolução natural do projeto, métodos de negócio poderiam ser adicionados aqui, por exemplo:
+
+```java
+// Métodos que poderiam ser adicionados futuramente:
+
+public void adicionarConta(Conta conta) {
+    this.contas.add(conta);
+}
+
+public Conta buscarPorNumero(int numero) {
+    return this.contas.stream()
+        .filter(c -> c.getNumero() == numero)
+        .findFirst()
+        .orElse(null);
+}
+```
+
+---
+
+### `Main.java` — Ponto de Entrada
+
+```java
+package org.banco;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        // 1. Cria o cliente e define seu nome via setter.
+        Cliente venilton = new Cliente();
+        venilton.setNome("Venilton");
+
+        // 2. Instancia os dois tipos de conta passando o cliente.
+        //    Note que a variável é declarada como "Conta" (tipo abstrato),
+        //    mas o objeto criado é do tipo concreto (ContaCorrente/ContaPoupanca).
+        //    Isso é polimorfismo: cc pode ser tratado como qualquer Conta.
+        Conta cc       = new ContaCorrente(venilton);
+        Conta poupanca = new ContaPoupanca(venilton);
+
+        // 3. Deposita R$ 100,00 na conta corrente.
+        //    Saldo da CC passa de 0,00 para 100,00.
+        cc.depositar(100);
+
+        // 4. Transfere os R$ 100,00 da CC para a Poupança.
+        //    Internamente: cc.sacar(100) e poupanca.depositar(100).
+        //    Saldo da CC volta a 0,00. Saldo da Poupança vai para 100,00.
+        cc.transferir(100, poupanca);
+
+        // 5. Imprime os extratos.
+        //    Cada objeto executa SEU PRÓPRIO imprimirExtrato() — polimorfismo em ação.
+        cc.imprimirExtrato();
+        poupanca.imprimirExtrato();
+    }
+}
+```
+
+**Fluxo de execução passo a passo:**
+
+```
+Criar cliente "Venilton"
+        │
+        ▼
+Criar ContaCorrente (número: 1, saldo: 0,00)
+        │
+        ▼
+Criar ContaPoupanca (número: 2, saldo: 0,00)
+        │
+        ▼
+cc.depositar(100) → saldo CC = 100,00
+        │
+        ▼
+cc.transferir(100, poupanca)
+   ├── cc.sacar(100)         → saldo CC = 0,00
+   └── poupanca.depositar(100) → saldo Poupança = 100,00
+        │
+        ▼
+cc.imprimirExtrato()      → exibe extrato da Conta Corrente
+poupanca.imprimirExtrato() → exibe extrato da Conta Poupança
+```
+
+---
+
+## Os Quatro Pilares da POO no Projeto
+
+| Pilar | Definição | Como aparece neste projeto |
+|---|---|---|
+| **Abstração** | Representar apenas o essencial de um conceito, ignorando detalhes irrelevantes | `IConta` define o contrato mínimo de qualquer conta. `Conta` implementa o comportamento comum sem se preocupar com o tipo específico |
+| **Encapsulamento** | Proteger o estado interno de um objeto, expondo apenas o necessário | `saldo` é `protected`; só é alterado pelos métodos `sacar`, `depositar` e `transferir`. `SEQUENCIAL` é `private`, impedindo manipulação externa do contador |
+| **Herança** | Reaproveitar comportamento de uma classe em outra mais especializada | `ContaCorrente` e `ContaPoupanca` herdam de `Conta` todos os atributos e métodos — sem duplicar uma linha de código |
+| **Polimorfismo** | Tratar objetos de tipos diferentes de forma uniforme, confiando que cada um executará o comportamento correto | `cc` é declarada como `Conta`, mas em tempo de execução é uma `ContaCorrente`. `cc.imprimirExtrato()` invoca automaticamente a implementação correta. O mesmo vale para o parâmetro `IConta contaDestino` em `transferir()` |
+
+---
+
+## Modificadores de Acesso
+
+Os modificadores controlam **quem pode ver e usar** cada membro de uma classe. A escolha correta é fundamental para o encapsulamento.
+
+| Modificador | Visibilidade | Uso neste projeto |
+|---|---|---|
+| `private` | Somente a própria classe | `AGENCIA_PADRAO`, `SEQUENCIAL`, `nome` (Cliente), `nome` e `contas` (Banco) |
+| `protected` | A classe, subclasses e classes do mesmo pacote | `agencia`, `numero`, `saldo`, `cliente` e `imprimirInfosComuns()` em `Conta` |
+| `public` | Qualquer classe do sistema | Getters, setters, construtores e os métodos da interface |
+
+**Regra prática:** comece sempre com `private`. Promova para `protected` apenas se uma subclasse precisar de acesso direto. Promova para `public` apenas para a API que o mundo externo deve enxergar. Nunca exponha atributos diretamente como `public`.
+
+---
+
+## Saída Esperada
+
+Ao executar `Main.java`, a saída no console será:
+
+```
+=== Extrato Conta Corrente ===
+Titular: Venilton
+Agencia: 1
+Numero: 1
+Saldo: 0,00
+
+=== Extrato Conta Poupança ===
+Titular: Venilton
+Agencia: 1
+Numero: 2
+Saldo: 100,00
+```
+
+> **Por que o saldo da Conta Corrente é `0,00`?** Porque o depósito de R$ 100,00 foi **integralmente transferido** para a Conta Poupança logo em seguida. O extrato reflete o saldo no momento da impressão.
+
+---
+
+## Como Executar
+
+**Pré-requisito:** JDK 11 ou superior instalado.
+
+```bash
+# 1. Clone o repositório
+git clone https://github.com/seu-usuario/lab-java-banco-digital.git
+cd lab-java-banco-digital
+
+# 2. Compile todos os arquivos Java (de dentro da pasta src/main/java)
+javac -d out src/main/java/org/banco/*.java
+
+# 3. Execute a classe principal
+java -cp out org.banco.Main
+```
+
+Ou simplesmente abra o projeto no **IntelliJ IDEA** e pressione `Shift + F10` para compilar e executar.
+
+---
+
+## O que NÃO Versionar
+
+O IntelliJ IDEA gera arquivos locais que não devem ir para o repositório. O `.gitignore` deve conter no mínimo:
 
 ```
 out/
@@ -49,124 +512,24 @@ out/
 .idea/
 ```
 
-- **`out/`** — arquivos `.class` compilados. São gerados automaticamente a partir do fonte; não há razão para versioná-los.
-- **`*.iml`** — arquivo de configuração do módulo do IntelliJ, específico da instalação local.
-- **`.idea/`** — pasta criada pelo IntelliJ com configurações internas da IDE, também local.
-
----
-
-## 🗂️ Descrição dos Arquivos
-
-### `IConta.java`
-Interface que define o **contrato** de comportamento de qualquer conta bancária no sistema. Declara os seguintes métodos que todas as contas devem implementar:
-
-- `sacar(double valor)` — Realiza um saque na conta.
-- `depositar(double valor)` — Realiza um depósito na conta.
-- `transferir(double valor, IConta contaDestino)` — Transfere um valor para outra conta.
-- `imprimirExtrato()` — Exibe o extrato da conta.
-
----
-
-### `Conta.java`
-Classe **abstrata** que implementa a interface `IConta` e serve como base para os tipos concretos de conta. Contém:
-
-- Atributos comuns a todas as contas: `agencia`, `numero`, `saldo` e `cliente`.
-- Lógica de numeração automática de contas via atributo estático `SEQUENCIAL`.
-- Agência padrão definida pela constante `AGENCIA_PADRAO = 1`.
-- Implementação padrão dos métodos `sacar`, `depositar` e `transferir`.
-- Método protegido `imprimirInfosComuns()`, utilizado pelas subclasses para exibir titular, agência, número e saldo.
-- O método `imprimirExtrato()` é abstrato, delegando a implementação às subclasses.
-
----
-
-### `ContaCorrente.java`
-Subclasse concreta de `Conta` que representa uma **Conta Corrente**. Implementa o método `imprimirExtrato()`, exibindo o cabeçalho `=== Extrato Conta Corrente ===` seguido das informações comuns da conta.
-
----
-
-### `ContaPoupanca.java`
-Subclasse concreta de `Conta` que representa uma **Conta Poupança**. Implementa o método `imprimirExtrato()`, exibindo o cabeçalho `=== Extrato Conta Poupança ===` seguido das informações comuns da conta.
-
----
-
-### `Cliente.java`
-Classe que representa o **cliente** do banco. Possui apenas o atributo `nome`, com os métodos `getNome()` e `setNome()` para acesso e modificação do valor.
-
----
-
-### `Banco.java`
-Classe que representa a entidade **Banco**. Possui os atributos:
-
-- `nome` — Nome do banco.
-- `contas` — Lista de contas associadas ao banco (do tipo `List<Conta>`).
-
-Fornece getters e setters para ambos os atributos. Nesta versão do projeto, a classe serve como estrutura de dados do banco, sem lógica de negócio adicional implementada.
-
----
-
-### `Main.java`
-Classe principal com o método `main`, ponto de entrada do programa. Demonstra o funcionamento do sistema:
-
-1. Cria um cliente chamado **Arthur**.
-2. Abre uma Conta Corrente e uma Conta Poupança para esse cliente.
-3. Deposita R$ 100,00 na Conta Corrente.
-4. Transfere R$ 100,00 da Conta Corrente para a Conta Poupança.
-5. Imprime o extrato de ambas as contas.
-
----
-
-## Saída Esperada da Execução
-
-```
-=== Extrato Conta Corrente ===
-Titular: Arthur
-Agencia: 1
-Numero: 1
-Saldo: 0,00
-=== Extrato Conta Poupança ===
-Titular: Arthur
-Agencia: 1
-Numero: 2
-Saldo: 100,00
-```
-
-> **Observação:** O saldo da Conta Corrente aparece como `0,00` porque o depósito de R$ 100,00 foi integralmente transferido para a Conta Poupança.
-
----
-
-## Conceitos de POO Aplicados
-
-| Conceito | Aplicação no Projeto |
+| Entrada | Motivo para ignorar |
 |---|---|
-| **Abstração** | Classe abstrata `Conta` e interface `IConta` definem apenas o essencial do domínio bancário |
-| **Encapsulamento** | Atributos `private`/`protected` protegem a lógica interna; o saldo só é alterado via `sacar`, `depositar` e `transferir` |
-| **Herança** | `ContaCorrente` e `ContaPoupanca` herdam de `Conta`, aplicando o princípio DRY (Don't Repeat Yourself) |
-| **Polimorfismo** | Objetos instanciados como `ContaCorrente` ou `ContaPoupanca` são referenciados pelo tipo `Conta`, e cada um executa seu próprio `imprimirExtrato()` |
+| `out/` | Arquivos `.class` compilados. São gerados automaticamente e variam por máquina |
+| `*.iml` | Configuração de módulo do IntelliJ, específica da instalação local |
+| `.idea/` | Pasta de configurações internas da IDE, também local |
 
-### Sobre os modificadores de acesso utilizados
-
-- **`private`** — Informação restrita à própria classe (ex.: constante `AGENCIA_PADRAO` e contador `SEQUENCIAL`).
-- **`protected`** — Compartilhado dentro da hierarquia de herança; permite que as subclasses acessem `agencia`, `numero` e `saldo` sem expô-los publicamente.
-- **`public`** — Acessível a qualquer classe do sistema (ex.: `getAgencia()`, `getSaldo()`).
+> **Regra de ouro do `.gitignore`:** versione apenas o que outro desenvolvedor precisaria para recriar o projeto do zero — o código-fonte e arquivos de configuração do projeto. Nunca versione artefatos gerados automaticamente.
 
 ---
 
-## Requisitos Técnicos
-
-- Conhecimentos básicos de Programação Orientada a Objetos em Java
-- Ambiente de desenvolvimento Java configurado (JDK 11+)
-- Familiaridade com repositórios Git (opcional, mas recomendado)
-- Capacidade de abstração para reproduzir a solução proposta e implementar melhorias
-
----
-
-## Tecnologias Utilizadas
+## 🛠️ Tecnologias Utilizadas
 
 - **Java** (JDK 11+)
 - **IntelliJ IDEA Community Edition**
 
 ---
 
-## Referências:
+## 📚 Referências
 
-- [Repositório de Estudos – Bootcamp TQI Fullstack Developer](https://github.com/ahaerdy/DIO-learning/tree/main/TQI%20Fullstack%20Developer)
+- [Documentação oficial do Java — Oracle](https://docs.oracle.com/en/java/)
+- [Repositório de Estudos — Bootcamp TQI Fullstack Developer](https://github.com/ahaerdy/DIO-learning/tree/main/TQI%20Fullstack%20Developer)
