@@ -123,7 +123,7 @@ Uma interface é um **contrato**. Ela declara **o que** uma classe deve fazer, s
 **Por que usar uma interface aqui?**
 Ao receber um `IConta` como parâmetro (em vez de `ContaCorrente` ou `ContaPoupanca` diretamente), o método `transferir` pode trabalhar com **qualquer tipo de conta** — presente ou futura. Se amanhã surgir uma `ContaInvestimento`, ela também pode ser usada em transferências sem alterar nenhum código existente. Isso é o **Princípio Aberto/Fechado** (Open/Closed Principle) do SOLID.
 
-> Pense na interface como a tomada elétrica de uma casa. Qualquer aparelho com o plugue correto (que "implementa" o contrato) pode ser ligado, independente de ser uma geladeira, televisão ou ventilador.
+> **Analogia**: Pense na interface como a tomada elétrica de uma casa. Qualquer aparelho com o plugue correto (que "implementa" o contrato) pode ser ligado, independente de ser uma geladeira, televisão ou ventilador.
 
 ---
 
