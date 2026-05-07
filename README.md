@@ -517,7 +517,7 @@ out/
 | `*.iml` | Configuração de módulo do IntelliJ, específica da instalação local |
 | `.idea/` | Pasta de configurações internas da IDE, também local |
 
-> **Regra de ouro do `.gitignore`:** versione apenas o que outro desenvolvedor precisaria para recriar o projeto do zero — o código-fonte e arquivos de configuração do projeto. Nunca versione artefatos gerados automaticamente.
+> **Regra do `.gitignore`:** versione apenas o que outro desenvolvedor precisaria para recriar o projeto do zero — o código-fonte e arquivos de configuração do projeto. Nunca versione artefatos gerados automaticamente.
 
 ---
 
