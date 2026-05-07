@@ -60,7 +60,6 @@ lab-java-banco-digital/
 └── README.md
 ```
 
-> **Por que essa organização de pastas?**
 > O caminho `src/main/java/org/banco` segue a convenção do Maven (gerenciador de projetos Java mais popular). A pasta `src/main/java` separa o código-fonte de testes e recursos. O pacote `org.banco` evita conflito de nomes com classes de outros projetos — é uma boa prática usar o domínio invertido da organização como prefixo do pacote.
 
 ---
